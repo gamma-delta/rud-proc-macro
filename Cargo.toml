@@ -1,0 +1,21 @@
+[package]
+name = "rud-proc-macro"
+version = "0.1.0"
+authors = ["gamma-delta"]
+edition = "2018"
+
+description = "Internal crate for rlua-userdata-derive"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rud-internal = {git = "https://github.com/gamma-delta/rud-internal"}
+
+proc-macro2 = "1.0.24"
+syn = {version = "1.0.48", features = ["extra-traits"] }
+quote = "1.0.7"
+
+rlua = {git = "https://github.com/gamma-delta/rlua-arcmux-userdata"}
+
+[lib]
+proc-macro = true
