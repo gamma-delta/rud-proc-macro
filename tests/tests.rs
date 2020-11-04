@@ -76,3 +76,17 @@ fn empty() {
         field2: i32,
     }
 }
+
+#[test]
+fn generics() {
+    #[derive(UserData)]
+    struct Foo<'a, T>
+    where
+        T: std::fmt::Display,
+    {
+        reference: &'a i32,
+        displayer: T,
+        #[userdata]
+        accessible_field: String,
+    }
+}

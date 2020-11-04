@@ -170,8 +170,10 @@ fn impl_user_data(ast: &syn::DeriveInput) -> TokenStream {
     };
 
     let crate_root = structwide_opts.crate_root;
+    let generics = &ast.generics;
+    let where_clause = &generics.where_clause;
     let out = quote! {
-        impl #crate_root::rlua::UserData for #struct_name {
+        impl#generics #crate_root::rlua::UserData for #struct_name#generics #where_clause {
             fn add_methods<'lua, M: #crate_root::rlua::UserDataMethods<'lua, Self>>(methods: &mut M) {
                 use #crate_root::rlua::{ToLua, FromLua, MetaMethod, Error, Value, Integer as LuaInteger};
 
