@@ -39,6 +39,11 @@ fn impl_user_data(ast: &syn::DeriveInput) -> TokenStream {
     // Map the index of the field to its information
     let mut field_infos = HashMap::new();
     let fields_vec = fields.iter().collect::<Vec<_>>();
+    if fields_vec.is_empty() {
+        // no need to continue
+        // return nothing
+        return TokenStream::new();
+    }
     for (idx, f) in fields_vec.iter().enumerate() {
         for attr in f.attrs.iter() {
             if attr.path.is_ident("userdata") {
