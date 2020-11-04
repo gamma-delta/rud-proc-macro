@@ -174,7 +174,7 @@ fn impl_user_data(ast: &syn::DeriveInput) -> TokenStream {
     let where_clause = &generics.where_clause;
     let out = quote! {
         impl#generics #crate_root::rlua::UserData for #struct_name#generics #where_clause {
-            fn add_methods<'lua, M: #crate_root::rlua::UserDataMethods<'lua, Self>>(methods: &mut M) {
+            fn add_methods<'__lua__, M: #crate_root::rlua::UserDataMethods<'__lua__, Self>>(methods: &mut M) {
                 use #crate_root::rlua::{ToLua, FromLua, MetaMethod, Error, Value, Integer as LuaInteger};
 
                 methods.add_meta_method(MetaMethod::Index, |ctx, this, key: Value| -> Result<Value, Error> {
