@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use proc_macro::TokenStream;
 
-use proc_macro2::{Literal, TokenStream as TokenStream2};
+use proc_macro2::{Literal, Span, TokenStream as TokenStream2};
 use quote::quote;
 use syn::{
     parse::{Parse, ParseStream},
@@ -19,7 +19,14 @@ pub fn user_data_derive(input: TokenStream) -> TokenStream {
 fn impl_user_data(ast: &syn::DeriveInput) -> TokenStream {
     let fields = match &ast.data {
         Data::Struct(s) => &s.fields,
-        _ => panic!("`UserData` can only be derived on Structs."),
+        _ => {
+            return Error::new(
+                Span::call_site(),
+                "`UserData` can only be derived on Structs.",
+            )
+            .to_compile_error()
+            .into()
+        }
     };
 
     let struct_name = &ast.ident;
@@ -71,7 +78,12 @@ fn impl_user_data(ast: &syn::DeriveInput) -> TokenStream {
 
     for (idx, field) in fields_vec.iter().enumerate() {
         // this unwrap is OK because we made sure all these idxes exist already
-        let field_info = field_infos.get(&idx).unwrap();
+        let field_info = match field_infos.get(&idx) {
+            Some(it) => it,
+            None => {
+                continue;
+            }
+        };
 
         // Get the name of the field
         // If it has no name, use its index in the struct
