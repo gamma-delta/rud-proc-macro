@@ -279,7 +279,7 @@ struct StructwideOpts {
 impl Default for StructwideOpts {
     fn default() -> Self {
         Self {
-            crate_root: syn::parse2(quote!(::rud_internal)).unwrap(),
+            crate_root: syn::parse2(quote!(::rlua_userdata_derive::rud_internal)).unwrap(),
         }
     }
 }
@@ -305,7 +305,9 @@ impl Parse for StructwideOpts {
         }
 
         Ok(Self {
-            crate_root: crate_root.unwrap_or_else(|| syn::parse2(quote!(::rud_internal)).unwrap()),
+            crate_root: crate_root.unwrap_or_else(|| {
+                syn::parse2(quote!(::rlua_userdata_derive::rud_internal)).unwrap()
+            }),
         })
     }
 }
